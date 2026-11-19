@@ -1,0 +1,21 @@
+// Launch with:  spring docs/example_startscript.txt
+// (after `python3 build.py --install`)  Two human slots, one per faction.
+[GAME]
+{
+	GameType = polywars 0.1.0;
+	MapName  = Pylon City 1.0;
+	IsHost   = 1;
+	MyPlayerName = Commander;
+	HostIP   = 127.0.0.1;
+	HostPort = 8452;
+	StartMetal  = 1000;
+	StartEnergy = 1500;
+
+	[PLAYER0] { Name = Commander; Team = 0; }
+	[PLAYER1] { Name = Rival;     Team = 1; Spectator = 0; }
+
+	[TEAM0] { TeamLeader = 0; AllyTeam = 0; Side = Aegis; RGBColor = 0.2 0.5 1.0; }
+	[TEAM1] { TeamLeader = 1; AllyTeam = 1; Side = Vanta; RGBColor = 1.0 0.3 0.2; }
+	[ALLYTEAM0] { NumAllies = 0; }
+	[ALLYTEAM1] { NumAllies = 0; }
+}
