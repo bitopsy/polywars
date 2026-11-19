@@ -2,7 +2,7 @@ function gadget:GetInfo()
 	return {
 		name    = "PW Commander Weapons",
 		desc    = "Adds per-weapon ON/OFF toggles (commands W1..W6) to commanders; disabled weapons never acquire targets",
-		author  = "goddot",
+		author  = "Pylon Wars",
 		date    = "2026",
 		license = "GPL v2 or later",
 		layer   = 0,

@@ -5,7 +5,7 @@ local mapinfo = {
 	name        = "Pylon City",
 	shortname   = "PylonCity",
 	description = "City-grid duel. 12 metal spots in open plazas; Aegis starts west, Vanta east.",
-	author      = "goddot",
+	author      = "Pylon Wars",
 	version     = "1.0",
 	modtype     = 3,
 	mapfile     = "maps/PylonCity.smf",
@@ -17,7 +17,6 @@ local mapinfo = {
 	maxMetal       = 2.0,
 	extractorRadius = 60,
 	voidWater      = false,
-	autoShowMetal  = true,
 
 	smf = {
 		minheight    = 0,      -- MIN_H (gen_map.py)

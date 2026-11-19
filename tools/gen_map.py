@@ -178,8 +178,8 @@ def write_metal(path):
         for pz in range(METAL_RES):
             row = bytearray(METAL_RES)
             for cx, cz in px_spots:
-                if abs(pz - cz) <= 2:
-                    for px in range(cx - 2, cx + 3):
+                if abs(pz - cz) <= 3:
+                    for px in range(cx - 3, cx + 4):
                         row[px] = 255
             yield bytes(row)
     write_png(path, METAL_RES, METAL_RES, 0, 8, rows())

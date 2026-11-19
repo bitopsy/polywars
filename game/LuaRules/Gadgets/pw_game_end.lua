@@ -2,7 +2,7 @@ function gadget:GetInfo()
 	return {
 		name    = "PW Commander Death = Defeat",
 		desc    = "A team without a commander is wiped out; the last ally team standing wins",
-		author  = "goddot",
+		author  = "Pylon Wars",
 		date    = "2026",
 		license = "GPL v2 or later",
 		layer   = 0,

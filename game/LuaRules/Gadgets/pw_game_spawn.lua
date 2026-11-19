@@ -2,7 +2,7 @@ function gadget:GetInfo()
 	return {
 		name    = "PW Game Spawn",
 		desc    = "Spawns each team's commander at its start position and sets start resources",
-		author  = "goddot",
+		author  = "Pylon Wars",
 		date    = "2026",
 		license = "GPL v2 or later",
 		layer   = -1,
@@ -50,7 +50,7 @@ local function SpawnTeam(teamID, order)
 	local facing = (x < Game.mapSizeX / 2) and "east" or "west"            -- face the map centre
 	local unitID = Spring.CreateUnit(StartUnitName(teamID), x, Spring.GetGroundHeight(x, z), z, facing, teamID)
 	if not unitID then
-		Spring.Echo("[polywars] FAILED to spawn commander for team " .. teamID)
+		Spring.Echo("[Pylon Wars] FAILED to spawn commander for team " .. teamID)
 		return
 	end
 	-- start resources (same behaviour as the stock spawn gadget: storage == start amount)

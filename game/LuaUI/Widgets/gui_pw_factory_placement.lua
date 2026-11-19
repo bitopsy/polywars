@@ -2,7 +2,7 @@ function widget:GetInfo()
 	return {
 		name    = "PW Factory Placement",
 		desc    = "While placing a weapon factory: shows metal spots, pylon ranges, power links and whether the spot is valid",
-		author  = "goddot",
+		author  = "Pylon Wars",
 		date    = "2026",
 		license = "GPL v2 or later",
 		layer   = 0,
@@ -50,9 +50,21 @@ end
 function widget:Initialize()
 	for name in pairs(cfg.factories) do
 		local ud = UnitDefNames[name]
-		if ud then factoryDefs[ud.id] = true end
+		if ud then factoryDefs[ud.id] = "factory" end
+	end
+	for name in pairs(cfg.turrets) do
+		local ud = UnitDefNames[name]
+		if ud then factoryDefs[ud.id] = "turret" end
+	end
+	for name in pairs(cfg.siphons) do
+		local ud = UnitDefNames[name]
+		if ud then factoryDefs[ud.id] = "siphon" end
 	end
 	spots = ScanMetalSpots()
+	local fb = placement.FallbackSpots()
+	if #spots == 0 and fb then   -- compiled map has no usable metal layer: show the configured spots
+		for _, sp in ipairs(fb) do spots[#spots + 1] = { x = sp[1], z = sp[2] } end
+	end
 end
 
 local function ActiveFactory()
@@ -81,10 +93,13 @@ function widget:DrawWorldPreUnit()
 	local mx, my = Spring.GetMouseState()
 	local kind, pos = Spring.TraceScreenRay(mx, my, true)
 	if kind == "ground" and pos then
-		local ok, why = placement.CanPlaceFactory(team, pos[1], pos[3])
+		local kind = ActiveFactory()
+		local check = (kind == "siphon") and placement.CanPlaceSiphon
+			or (kind == "turret") and placement.CanPlaceTurret or placement.CanPlaceFactory
+		local ok, why = check(team, pos[1], pos[3])
 		lastWhy = ok and "" or (why or "")
 		if ok then gl.Color(0.2, 1, 0.3, 0.9) else gl.Color(1, 0.2, 0.2, 0.9) end
-		gl.DrawGroundCircle(pos[1], pos[2], pos[3], 60, 32)
+		gl.DrawGroundCircle(pos[1], pos[2], pos[3], (kind == "siphon") and 28 or 40, 32)
 	end
 	gl.LineWidth(1); gl.Color(1, 1, 1, 1)
 end

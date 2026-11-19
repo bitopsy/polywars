@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""polywars build script.
+"""Pylon Wars build script.
 
     python3 build.py                 # game (.sdz) + map (.sd7)  -> dist/
     python3 build.py --game          # only dist/PylonWars-<version>.sdz
@@ -165,7 +165,7 @@ def install(results):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Build polywars (game .sdz + map .sd7)")
+    ap = argparse.ArgumentParser(description="Build Pylon Wars (game .sdz + map .sd7)")
     ap.add_argument("--game", action="store_true", help="build only the game")
     ap.add_argument("--map", action="store_true", help="build only the map")
     ap.add_argument("--no-convert", action="store_true", help="map: reuse map/prebuilt/maps/*.smf|smt")

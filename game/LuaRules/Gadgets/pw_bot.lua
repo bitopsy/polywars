@@ -2,7 +2,7 @@ function gadget:GetInfo()
 	return {
 		name    = "PW Skirmish Bot",
 		desc    = "Simple built-in opponent: pylon -> generator -> factory on a metal spot, then mass units and attack",
-		author  = "goddot",
+		author  = "Pylon Wars",
 		date    = "2026",
 		license = "GPL v2 or later",
 		layer   = 5,
@@ -28,6 +28,17 @@ local function Dist2(ax, az, bx, bz) return (ax - bx) ^ 2 + (az - bz) ^ 2 end
 
 -- nearest metal spot (centroid of the metal cells around the nearest metal cell)
 local function FindSpot(cx, cz, taken)
+	local fb = placement.FallbackSpots()
+	if fb then   -- configured plaza spots (works even if the compiled metal map is empty)
+		local bestD, bx, bz = math.huge
+		for _, sp in ipairs(fb) do
+			local free = true
+			for _, t in ipairs(taken) do if Dist2(sp[1], sp[2], t[1], t[2]) < 150 ^ 2 then free = false end end
+			local d = Dist2(sp[1], sp[2], cx, cz)
+			if free and d < bestD then bestD, bx, bz = d, sp[1], sp[2] end
+		end
+		if bx then return bx, bz end
+	end
 	local bestD, bx, bz = math.huge
 	for z = 0, Game.mapSizeZ - sq, sq do
 		for x = 0, Game.mapSizeX - sq, sq do
@@ -88,6 +99,18 @@ local function Think(teamID, b)
 	if not cmdr then return end
 	local cx, _, cz = Spring.GetUnitPosition(cmdr)
 
+	b.home = b.home or { cx, cz }
+	local hp, maxhp = Spring.GetUnitHealth(cmdr)
+	if hp and maxhp and hp < 0.35 * maxhp then
+		local myAlly = Spring.GetUnitAllyTeam(cmdr)
+		for _, u in ipairs(Spring.GetUnitsInCylinder(cx, cz, 450)) do
+			if Spring.GetUnitAllyTeam(u) ~= myAlly and #UnitDefs[Spring.GetUnitDefID(u)].weapons > 0 then
+				Spring.GiveOrderToUnit(cmdr, cfg.CMD_BLINK, { b.home[1], Spring.GetGroundHeight(b.home[1], b.home[2]), b.home[2] }, {})
+				break
+			end
+		end
+	end
+
 	if not b.spot then
 		local sx, sz = FindSpot(cx, cz, {})
 		if not sx then return end
@@ -111,9 +134,40 @@ local function Think(teamID, b)
 			if x then Build(cmdr, gen.id, x, z) end
 		elseif CountNear(teamID, fac.id, sx, sz, 100) == 0 then
 			if placement.CanPlaceFactory(teamID, sx, sz) then Build(cmdr, fac.id, sx, sz) end
-		elseif nGen < 4 then
+		elseif nGen < 3 then
 			local x, z = FindPos(gen.id, sx, sz, 150, 300, sx, sz)
 			if x then Build(cmdr, gen.id, x, z) end
+		else
+			-- expansion: pylon + metal siphon on further metal spots (max 3)
+			local sip = Def(prefix, "siphon")
+			local tur = Def(prefix, "turret")
+			b.taken = b.taken or { { sx, sz } }
+			-- one defensive turret per claimed spot
+			for _, sp in ipairs(b.taken) do
+				if CountNear(teamID, tur.id, sp[1], sp[2], 220) == 0
+				   and (sp == b.taken[1] or CountNear(teamID, sip.id, sp[1], sp[2], 100, true) > 0) then
+					local x, z = FindPos(tur.id, sp[1], sp[2], 90, 200, sp[1], sp[2])
+					if x and placement.CanPlaceTurret(teamID, x, z) then Build(cmdr, tur.id, x, z); return end
+				end
+			end
+			if not b.cur and #b.taken < 4 then
+				local ex, ez = FindSpot(sx, sz, b.taken)
+				if ex then b.cur = { ex, ez } end
+			end
+			if b.cur then
+				local ex, ez = b.cur[1], b.cur[2]
+				if CountNear(teamID, sip.id, ex, ez, 100) > 0 or b.tries and b.tries > 4 then
+					b.taken[#b.taken + 1] = b.cur; b.cur, b.tries = nil, nil
+				elseif CountNear(teamID, pylon.id, ex, ez, cfg.PYLON_RANGE - 20, true) == 0 then
+					local x, z = FindPos(pylon.id, ex, ez, 150, 280, ex, ez)
+					b.tries = (b.tries or 0) + 1
+					if x then Build(cmdr, pylon.id, x, z) end
+				elseif placement.CanPlaceSiphon(teamID, ex, ez) then
+					Build(cmdr, sip.id, ex, ez)
+				else
+					b.tries = (b.tries or 0) + 1
+				end
+			end
 		end
 	end
 

@@ -42,4 +42,11 @@ return {
 	vanta_unit_howitzer = W{ name = "Howitzer",
 		range = 800, reloadtime = 3.0, damage = { default = 110 }, areaofeffect = 90,
 		edgeeffectiveness = 0.4, weaponvelocity = 430, size = 4.5 },
+
+	-- ===== v0.3 =====
+	vanta_unit_juggernaut = W{ name = "Juggernaut Cannon",
+		range = 310, reloadtime = 0.4, damage = { default = 48 }, weaponvelocity = 1300, sprayangle = 300, size = 2.2 },
+
+	vanta_turret_gun = W{ name = "Bastion Autocannon",
+		range = 350, reloadtime = 0.3, damage = { default = 22 }, weaponvelocity = 1500, sprayangle = 350, size = 1.8 },
 }

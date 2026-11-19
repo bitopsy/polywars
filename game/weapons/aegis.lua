@@ -45,4 +45,13 @@ return {
 	aegis_unit_beam = W{ name = "Prism Lance", weapontype = "LaserCannon",
 		range = 520, reloadtime = 2.5, damage = { default = 120 }, weaponvelocity = 1800,
 		rgbcolor = "0.8 0.9 1.0", thickness = 3.5, corethickness = 0.5, laserflaresize = 6 },
+
+	-- ===== v0.3 =====
+	aegis_unit_warden = W{ name = "Warden Beam", weapontype = "LaserCannon",
+		range = 460, reloadtime = 1.2, damage = { default = 85 }, weaponvelocity = 1500,
+		rgbcolor = "0.5 0.8 1.0", thickness = 3, corethickness = 0.45 },
+
+	aegis_turret_laser = W{ name = "Sentry Laser", weapontype = "LaserCannon",
+		range = 420, reloadtime = 0.6, damage = { default = 40 }, weaponvelocity = 1400,
+		rgbcolor = "0.3 0.7 1.0", thickness = 2.5, corethickness = 0.4 },
 }

@@ -1,4 +1,4 @@
-# polywars - design
+# Pylon Wars - design
 
 An RTS where the **commander is a hero unit**: you spend most of a fight micro-managing
 one character (positioning, weapon swaps, energy), like an MMORPG, while a small economy
@@ -39,7 +39,7 @@ The commander starts with 1500 energy storage and +25 E/s; spamming all six empt
 
 ## Economy and building
 * Resources: **metal** (commander +3/s, each factory +2/s) and **energy** (commander +25/s, generators).
-* Commander builds: **Pylon**, **Generator**, **Weapon Factory**.
+* Commander builds: **Pylon**, **Generator**, **Weapon Factory**, **Siphon**.
 * **Factory rule** (enforced in `LuaRules/Gadgets/pw_factory_rules.lua`):
   1. the build position is over a metal spot, **and**
   2. a *finished* pylon is within `PYLON_RANGE` (320 elmos), **and**
@@ -68,13 +68,28 @@ The commander starts with 1500 energy storage and +25 E/s; spamming all six empt
 | `tools/gen_assets.py` | placeholder S3O models, textures, pics |
 | `build.py` | builds `dist/*.sdz` and `dist/*.sd7` |
 
-## Status and caveats
-* **Not run in the Spring engine yet.** The scripts, map sources and archives are built and
-  structurally checked, but Lua was not executed. Expect to fix small API-version mismatches
-  (written against Spring 105.x conventions: `Script.SetWatchAllowTarget`, array-style `movedefs.lua`, `weapons/*.lua` auto-loading).
-* Models are generated box placeholders without animation scripts (the engine's null script is used), so units do not animate or aim visibly.
-* The map's `.smf/.smt` needs an external compiler (see README). The 4096 px texture, 257 px heightmap and 128 px metalmap are produced for it.
-* No AI is included; test as human vs human (`docs/example_startscript.txt`).
+## Systems added in v0.2
+* **Metal siphons** (`aegis_siphon`, `vanta_siphon`): +4 metal/s, 110-120 metal. Buildable only on a metal spot with a *finished pylon* in range (no generator needed). One factory **or** siphon per spot (`SPOT_CLEARANCE`). Commander metal income is only +3/s, so siphons are the economy: expand, then defend the spots.
+* **Blink** (key `F`, or the Blink command button): commander jumps up to 320 elmos toward the cursor, 100 energy, 9 s cooldown, stops at the last standable point on the way. Use it to disengage (kite) or to close on a sniper. Gadget `pw_blink.lua`; constants in `pw_config.lua`.
+* **Veterancy** (`pw_veterancy.lua`): every armed mobile unit earns XP = damage dealt + 2 x metal cost of kills; levels at 2000 / 6000 / 14000 / 28000 XP. Per level: +10 % max health, +7 % damage; commanders also +5 energy/s per level. The HUD shows the commander's level; level-ups are announced in chat.
+* **Skirmish bot** (`pw_bot.lua`): drives any AI-controlled team (a NullAI slot works as a placeholder). Builds pylon, generators, factory, then expands with pylon + siphon pairs on up to 3 more spots, produces units and attacks. Disable with modoption `pwbot=0`.
+
+## v0.3.0
+* **Heavy units**: Aegis *Warden* (3000 HP, 460-range beam, 400 metal) and Vanta *Juggernaut* (4000 HP, 310-range autocannon, 420 metal) from the weapon factories: a slow, expensive third tier that anchors a push.
+* **Turrets**: Aegis *Sentry* (laser, 420 range) and Vanta *Bastion* (autocannon, 350 range). They only build inside a finished pylon's range (`CanPlaceTurret`), so defending a siphon means extending the network first.
+* **Bot**: builds a turret at its base spot and at every siphon it claims, and blinks its commander back home when it drops below 35 % health with armed enemies nearby.
+* Version is now 0.3.0 (`modinfo.lua`): start scripts must say `Pylon Wars 0.3.2`.
+
+## v0.3.2: the wired network
+Pylons form a mesh (links up to `WIRE_PYLON_LINK` = 340 elmos). Generators within `POWER_LINK_RANGE` of a pylon feed it; siphons, turrets and factories need a finished pylon within `PYLON_RANGE`. Lose that pylon and they shut down until it is rebuilt, so pylons are the weak point to snipe and to defend. Wires are drawn by `gui_pw_wires.lua`.
+
+## Engine notes (learned the hard way)
+* LuaRules needs **both** `LuaRules/main.lua` and `draw.lua`; otherwise no gadget loads.
+* Unit `weapons` entries use `name =`, not `def =`.
+* Lua unit scripts (`scripts/`) only run with the `unit_script.lua` gadget; builders/factories/weapons need script callins (`scripts/pw_common.lua`). Factories must open the yard in `Activate`.
+* Structures need a yardmap (generated in `def()`); factories also need `isfactory = true`.
+* Start scripts use full archive names (`Pylon Wars 0.3.2`, `Pylon City 1.0`).
+* Models are placeholder boxes without animation.
 
 ## Next steps
-Dash/blink command for the commander, per-weapon XP levels (the MMO layer), a pylon "power field" that speeds nearby production, a second map, an AI gadget.
+Pylon power field (speeds production nearby), per-weapon commander perks at veteran levels, a second map, a 2v2 mode with shared pylon networks, bot use of Blink.

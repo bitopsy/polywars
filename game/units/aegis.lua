@@ -30,7 +30,7 @@ return {
 		maxvelocity = 2.3, acceleration = 0.22, brakerate = 0.5, turnrate = 1100,
 		sightdistance = 520,
 		builder = true, workertime = 200, buildspeed = 200, builddistance = 170, canreclaim = true, canrepair = true,
-		buildoptions = { "aegis_pylon", "aegis_generator", "aegis_factory" },
+		buildoptions = { "aegis_pylon", "aegis_generator", "aegis_factory", "aegis_siphon", "aegis_turret" },
 		energymake = 25, metalmake = 3, energystorage = 1500, metalstorage = 500,
 		-- slot order == hotkey order (Z X C V B N)
 		weapons = {
@@ -55,13 +55,21 @@ return {
 		footprintx = 3, footprintz = 3, energymake = 45,
 	}, STRUCTURE),
 
+	aegis_siphon = def({
+		script = "aegis_siphon.lua",
+		name = "Aegis Siphon", description = "Metal siphon: +4 metal/s (metal spot, pylon in range)",
+		objectname = "aegis_generator.s3o", buildpic = "aegis_generator.png",
+		maxdamage = 650, buildcostmetal = 110, buildcostenergy = 160, buildtime = 1500,
+		footprintx = 3, footprintz = 3, metalmake = 4,
+	}, STRUCTURE),
+
 	aegis_factory = def({
 		script = "aegis_factory.lua",
 		name = "Aegis Weapon Factory", description = "Builds combat units (metal spots only)",
 		objectname = "aegis_factory.s3o", buildpic = "aegis_factory.png",
 		maxdamage = 2800, buildcostmetal = 400, buildcostenergy = 700, buildtime = 5000,
-		footprintx = 5, footprintz = 5, yardmap = string.rep("o", 25), isfactory = true, builder = true, workertime = 120, buildspeed = 120, metalmake = 2,
-		buildoptions = { "aegis_skirmisher", "aegis_prism" },
+		footprintx = 4, footprintz = 4, yardmap = string.rep("o", 16), isfactory = true, builder = true, workertime = 120, buildspeed = 120, metalmake = 2,
+		buildoptions = { "aegis_skirmisher", "aegis_prism", "aegis_heavy" },
 	}, STRUCTURE),
 
 	aegis_skirmisher = def({
@@ -83,4 +91,23 @@ return {
 		maxvelocity = 1.7, acceleration = 0.1, brakerate = 0.3, turnrate = 700, sightdistance = 520,
 		weapons = { { name = "aegis_unit_beam" } },
 	}, MOBILE),
+
+	aegis_heavy = def({
+		script = "aegis_heavy.lua",
+		name = "Warden", description = "Heavy beam walker",
+		objectname = "aegis_prism.s3o", buildpic = "aegis_prism.png",
+		maxdamage = 3000, buildcostmetal = 400, buildcostenergy = 540, buildtime = 6000,
+		footprintx = 3, footprintz = 3, movementclass = "TANK3",
+		maxvelocity = 1.3, acceleration = 0.08, brakerate = 0.3, turnrate = 600, sightdistance = 480,
+		weapons = { { name = "aegis_unit_warden" } },
+	}, MOBILE),
+
+	aegis_turret = def({
+		script = "aegis_turret.lua",
+		name = "Sentry", description = "Pylon-powered laser turret",
+		objectname = "aegis_pylon.s3o", buildpic = "aegis_pylon.png",
+		maxdamage = 1200, buildcostmetal = 120, buildcostenergy = 200, buildtime = 1800,
+		footprintx = 2, footprintz = 2, sightdistance = 480,
+		weapons = { { name = "aegis_turret_laser" } },
+	}, STRUCTURE),
 }

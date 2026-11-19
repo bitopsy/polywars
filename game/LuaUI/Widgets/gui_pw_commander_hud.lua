@@ -2,7 +2,7 @@ function widget:GetInfo()
 	return {
 		name    = "PW Commander HUD",
 		desc    = "Weapon bar for the selected commander: hotkeys (Z X C V B N), range, energy cost, cooldown, ON/OFF",
-		author  = "goddot",
+		author  = "Pylon Wars",
 		date    = "2026",
 		license = "GPL v2 or later",
 		layer   = 0,
@@ -63,6 +63,14 @@ function widget:KeyPress(key, mods)
 	for slot, k in ipairs(cfg.WEAPON_KEYS) do
 		if k == name then Toggle(unitID, slot); return true end
 	end
+	if name == "f" then   -- Blink toward the mouse cursor
+		local mx, my = Spring.GetMouseState()
+		local kind, pos = Spring.TraceScreenRay(mx, my, true)
+		if kind == "ground" and pos then
+			Spring.GiveOrderToUnit(unitID, cfg.CMD_BLINK, { pos[1], pos[2], pos[3] }, {})
+		end
+		return true
+	end
 	return false
 end
 
@@ -99,6 +107,16 @@ function widget:DrawScreen()
 	gl.Color(1.0, 0.85, 0.2, 0.9); gl.Rect(ex1, barY, ex1 + (ex2b - ex1) * math.min(1, energy / math.max(1, storage or 1)), barY + 16)
 	gl.Color(1, 1, 1, 1)
 	gl.Text(("Energy %d / %d   (+%d / -%d per s)"):format(energy, storage or 0, income or 0, expense or 0), ex1 + 6, barY + 3, 12, "o")
+
+	-- blink cooldown + veteran level
+	do
+		local ready = Spring.GetUnitRulesParam(unitID, "pw_blink_ready") or 0
+		local lv = Spring.GetUnitRulesParam(unitID, "pw_level") or 0
+		local txt = (ready > frame) and ("Blink [F] %.1fs"):format((ready - frame) / 30) or "Blink [F] ready"
+		if energy < cfg.BLINK_COST and ready <= frame then gl.Color(1, 0.35, 0.35, 1) else gl.Color(0.7, 0.95, 1, 1) end
+		gl.Text(txt .. ("   (%d energy)   Veteran level %d"):format(cfg.BLINK_COST, lv), ex1 + 6, barY + 22, 12, "o")
+		gl.Color(1, 1, 1, 1)
+	end
 
 	for i = 1, n do
 		local wd      = WeaponDefs[ud.weapons[i].weaponDef]

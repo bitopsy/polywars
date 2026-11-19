@@ -1,4 +1,4 @@
--- Shared Lua Unit Script for every polywars unit (the models are single-piece placeholders and
+-- Shared Lua Unit Script for every Pylon Wars unit (the models are single-piece placeholders and
 -- there are no COB scripts). The engine only lets a unit build or aim when its script says so:
 --   * builders must enter "build stance" (INBUILDSTANCE) and expose a nano piece
 --   * factories must expose a build-info piece
