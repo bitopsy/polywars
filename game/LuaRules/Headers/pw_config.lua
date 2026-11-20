@@ -38,6 +38,10 @@ return {
 	-- Metal siphons need a metal spot + a finished pylon in range; one structure per spot
 	SPOT_CLEARANCE   = 72,
 
+	-- Repair beacon tuning
+	BEACON_HEAL      = 40,   -- HP restored per tick (every 15 frames / ~0.25s)
+	BEACON_ENERGY    = 0.05, -- energy cost per HP healed
+
 	commanders = { aegis_commander = true, vanta_commander = true },
 	pylons     = { aegis_pylon = true,     vanta_pylon = true },
 	generators = { aegis_generator = true, vanta_generator = true },
