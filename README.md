@@ -126,4 +126,6 @@ The bot builds a beacon and artillery at home and only mass-produces armed units
 
 **Demo:** [Pylon Wars v0.6.2 gameplay on YouTube](https://www.youtube.com/watch?v=WctTM2Ldu54)
 
+![Pylon Wars card art](game/bitmaps/loadpictures/card.jpg)
+
 ## v0.6.1 - scarcer energy, flickering lights
