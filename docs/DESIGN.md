@@ -78,7 +78,7 @@ The commander starts with 1500 energy storage and +25 E/s; spamming all six empt
 * **Heavy units**: Aegis *Warden* (3000 HP, 460-range beam, 400 metal) and Vanta *Juggernaut* (4000 HP, 310-range autocannon, 420 metal) from the weapon factories: a slow, expensive third tier that anchors a push.
 * **Turrets**: Aegis *Sentry* (laser, 420 range) and Vanta *Bastion* (autocannon, 350 range). They only build inside a finished pylon's range (`CanPlaceTurret`), so defending a siphon means extending the network first.
 * **Bot**: builds a turret at its base spot and at every siphon it claims, and blinks its commander back home when it drops below 35 % health with armed enemies nearby.
-* Version is now 0.3.0 (`modinfo.lua`): start scripts must say `Pylon Wars 0.6.1`.
+* Version is now 0.3.0 (`modinfo.lua`): start scripts must say `Pylon Wars 0.6.2`.
 
 ## v0.3.2: the wired network
 Pylons form a mesh (links up to `WIRE_PYLON_LINK` = 340 elmos). Generators within `POWER_LINK_RANGE` of a pylon feed it; siphons, turrets and factories need a finished pylon within `PYLON_RANGE`. Lose that pylon and they shut down until it is rebuilt, so pylons are the weak point to snipe and to defend. Wires are drawn by `LuaRules/Gadgets/pw_wires.lua`.
@@ -103,7 +103,7 @@ Pylon-powered set: `cfg.turrets` (turrets, artillery, beacons, masts). Beacon tu
 * Unit `weapons` entries use `name =`, not `def =`.
 * Lua unit scripts (`scripts/`) only run with the `unit_script.lua` gadget; builders/factories/weapons need script callins (`scripts/pw_common.lua`). Factories must open the yard in `Activate`.
 * Structures need a yardmap (generated in `def()`); factories also need `isfactory = true`.
-* Start scripts use full archive names (`Pylon Wars 0.6.1`, `Pylon City 1.0`).
+* Start scripts use full archive names (`Pylon Wars 0.6.2`, `Pylon City 1.0`).
 * Models are placeholder boxes without animation.
 
 ## Next steps

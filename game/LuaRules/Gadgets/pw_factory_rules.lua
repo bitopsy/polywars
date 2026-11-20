@@ -17,12 +17,14 @@ local placement = VFS.Include("LuaRules/Headers/pw_placement.lua")
 
 function gadget:AllowUnitCreation(unitDefID, builderID, builderTeam, x, y, z, facing)
 	local ud = UnitDefs[unitDefID]
-	if not ud or not x or not (cfg.factories[ud.name] or cfg.siphons[ud.name] or cfg.turrets[ud.name]) then
-		return true   -- not a metal-spot structure, or built out of a factory (no position given)
+	local n = ud and ud.name
+	if not n or not x or not (cfg.factories[n] or cfg.siphons[n] or cfg.turrets[n]
+	                          or cfg.beacons[n] or cfg.masts[n] or cfg.obelisks[n]) then
+		return true   -- not a pylon-powered structure, or built out of a factory (no position given)
 	end
-	local check = placement.CanPlaceFactory
-	if cfg.siphons[ud.name] then check = placement.CanPlaceSiphon
-	elseif cfg.turrets[ud.name] then check = placement.CanPlaceTurret end
+	local check = placement.CanPlaceTurret
+	if cfg.factories[n] then check = placement.CanPlaceFactory
+	elseif cfg.siphons[n] then check = placement.CanPlaceSiphon end
 	local ok, why = check(builderTeam, x, z)
 	if not ok then
 		Spring.SendMessageToTeam(builderTeam, "[Pylon Wars] " .. why)

@@ -15,7 +15,7 @@ tools/  gen_map.py, gen_assets.py, pngutil.py      build.py
 ## Build
 ```
 python3 build.py              # game + map
-python3 build.py --game       # dist/polywars-0.6.1.sdz  (no dependencies)
+python3 build.py --game       # dist/PylonWars-0.6.2.sdz  (no dependencies)
 python3 build.py --map        # dist/polycity.sd7
 python3 build.py --install    # copy into ~/.spring (or %USERPROFILE%/Documents/My Games/Spring, or $SPRING_DATADIR)
 python3 build.py --assets     # regenerate placeholder models/textures/pics
@@ -36,7 +36,7 @@ Without a compiler, `build.py --map` still writes the PNG sources to `map/build/
 
 ## Changelog (engine-tested fixes)
 - Added `LuaRules/main.lua` + `draw.lua` (without them no gadget loads, so no commander spawned).
-- Start scripts must use full archive names: `polywars 0.6.1`, `polycity 1.0`.
+- Start scripts must use full archive names: `polywars 0.6.2`, `polycity 1.0`.
 - Unit `weapons` entries use `name =` (this engine ignores `def =`).
 - Lua unit scripts (`scripts/`) + shipped `unit_script.lua` gadget: required for building/aiming.
 - Factories need `isfactory`, a yardmap and a yard-opening `Activate`; all structures get a yardmap.
@@ -112,3 +112,14 @@ The bot builds a beacon and artillery at home and only mass-produces armed units
 * **Low-energy flicker**: when a team's energy store drops below 25 % its pylon lights and power wires dim and flicker,
   with random blackout flashes that get more frequent as the store empties (about 11 % of the time at 20 %, ~50 % near 0).
   The curve lives in `LuaRules/Headers/pw_lightfx.lua` (`LOW`, brightness model) and is shared by `pw_pylon_glow.lua` and `pw_wires.lua`.
+
+## v0.6.2 - repair beacon crash fix
+* **Fixed** `pw_repair.lua:23: attempt to index field 'beacons' (a nil value)` (thrown every 15 frames): `pw_config.lua`
+  had no `beacons` set and no `BEACON_RADIUS`. Both are now defined, and the gadget caches beacon def IDs instead of
+  scanning every unit by name.
+* Beacons now heal **allied** units (not just the owner's team) and ignore dead/unpowered ones.
+* Repair beacons, sensor masts and heavy towers (Obelisk / Mortar Battery) are now actually pylon-powered like their
+  descriptions say: shut down without a pylon (`pw_power_grid`), only placeable inside the network (`pw_factory_rules`),
+  drawn on the wire overlay, previewed by the placement widget (new `cfg.beacons/masts/obelisks`, `placement.Sets().consumers`).
+* Removed the deprecated `Spring.GetUnitCommands(id, 0)` calls in the bot (uses `GetUnitCommandCount`).
+* Bot builds a repair beacon at its home base.

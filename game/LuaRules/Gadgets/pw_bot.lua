@@ -21,6 +21,8 @@ local placement = VFS.Include("LuaRules/Headers/pw_placement.lua")
 local CMD_FIGHT = CMD.FIGHT
 local sq        = cfg.METAL_SQUARE
 local bots      = {}
+-- GetUnitCommands(id, 0) is deprecated; GetUnitCommandCount is its replacement (fallback for old engines)
+local CmdCount  = Spring.GetUnitCommandCount or function(id) return Spring.GetUnitCommands(id, 0) or 0 end
 
 local function Def(prefix, kind) return UnitDefNames[prefix .. "_" .. kind] end
 
@@ -119,7 +121,7 @@ local function Think(teamID, b)
 	local sx, sz = b.spot[1], b.spot[2]
 
 	-- 1) economy / base building, only when the commander has nothing queued
-	if (Spring.GetUnitCommands(cmdr, 0) or 0) == 0 then
+	if CmdCount(cmdr) == 0 then
 		local nGen = CountNear(teamID, gen.id, sx, sz, 450)
 		if CountNear(teamID, pylon.id, sx, sz, cfg.PYLON_RANGE - 20) == 0 then
 			local x, z = FindPos(pylon.id, sx, sz, 150, 280, sx, sz)
@@ -137,6 +139,12 @@ local function Think(teamID, b)
 		elseif nGen < 3 then
 			local x, z = FindPos(gen.id, sx, sz, 150, 300, sx, sz)
 			if x then Build(cmdr, gen.id, x, z) end
+		elseif CountNear(teamID, Def(prefix, "beacon").id, sx, sz, 320) == 0
+		       and (Spring.GetTeamResources(teamID, "metal") or 0) > 200 then
+			-- one repair beacon at the home base keeps the army and the commander topped up
+			local bc = Def(prefix, "beacon")
+			local x, z = FindPos(bc.id, sx, sz, 120, 260, sx, sz)
+			if x and placement.CanPlaceTurret(teamID, x, z) then Build(cmdr, bc.id, x, z) end
 		else
 			-- expansion: pylon + metal siphon on further metal spots (max 3)
 			local sip = Def(prefix, "siphon")
@@ -173,7 +181,7 @@ local function Think(teamID, b)
 
 	-- 2) keep the factory producing
 	for _, f in ipairs(Spring.GetTeamUnitsByDefs(teamID, { fac.id })) do
-		if not Spring.GetUnitIsBeingBuilt(f) and (Spring.GetUnitCommands(f, 0) or 0) < 2 then
+		if not Spring.GetUnitIsBeingBuilt(f) and CmdCount(f) < 2 then
 			local opts = UnitDefs[fac.id].buildOptions
 			b.n = ((b.n or 0) % #opts) + 1
 			local pick = UnitDefs[opts[b.n]]
@@ -189,7 +197,7 @@ local function Attack(teamID, b)
 		local ud = UnitDefs[Spring.GetUnitDefID(u)]
 		if ud.canMove and not ud.isBuilder and not Spring.GetUnitIsBeingBuilt(u) then
 			army = army + 1
-			if (Spring.GetUnitCommands(u, 0) or 0) == 0 then idle[#idle + 1] = u end
+			if CmdCount(u) == 0 then idle[#idle + 1] = u end
 		end
 	end
 	if army < 5 or #idle == 0 then return end

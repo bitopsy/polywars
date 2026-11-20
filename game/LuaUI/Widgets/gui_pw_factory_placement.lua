@@ -52,9 +52,11 @@ function widget:Initialize()
 		local ud = UnitDefNames[name]
 		if ud then factoryDefs[ud.id] = "factory" end
 	end
-	for name in pairs(cfg.turrets) do
-		local ud = UnitDefNames[name]
-		if ud then factoryDefs[ud.id] = "turret" end
+	for _, key in ipairs({ "turrets", "beacons", "masts", "obelisks" }) do   -- all just need a pylon in range
+		for name in pairs(cfg[key]) do
+			local ud = UnitDefNames[name]
+			if ud then factoryDefs[ud.id] = "turret" end
+		end
 	end
 	for name in pairs(cfg.siphons) do
 		local ud = UnitDefNames[name]

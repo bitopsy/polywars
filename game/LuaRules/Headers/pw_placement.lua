@@ -8,7 +8,7 @@ local defSets
 function M.Sets()
 	if not defSets then
 		defSets = {}
-		for _, key in ipairs({ "commanders", "pylons", "generators", "factories", "siphons", "turrets" }) do
+		for _, key in ipairs({ "commanders", "pylons", "generators", "factories", "siphons", "turrets", "beacons", "masts", "obelisks" }) do
 			local set = {}
 			for name in pairs(cfg[key]) do
 				local ud = UnitDefNames[name]
@@ -16,6 +16,12 @@ function M.Sets()
 			end
 			defSets[key] = set
 		end
+		-- every structure that only works while a finished friendly pylon is in range
+		local all = {}
+		for _, key in ipairs({ "siphons", "turrets", "factories", "beacons", "masts", "obelisks" }) do
+			for id in pairs(defSets[key]) do all[id] = true end
+		end
+		defSets.consumers = all
 	end
 	return defSets
 end
@@ -111,7 +117,7 @@ function M.CanPlaceTurret(teamID, x, z)
 	for _, pid in ipairs(Spring.GetUnitsInCylinder(x, z, cfg.PYLON_RANGE, teamID)) do
 		if sets.pylons[Spring.GetUnitDefID(pid)] and Finished(pid) then return true end
 	end
-	return false, "Turrets must be built within range of a finished pylon."
+	return false, "This structure must be built within range of a finished pylon."
 end
 
 -- returns ok(boolean), reason(string|nil)

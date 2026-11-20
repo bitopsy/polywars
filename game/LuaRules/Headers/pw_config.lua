@@ -41,11 +41,15 @@ return {
 	-- Repair beacon tuning
 	BEACON_HEAL      = 40,   -- HP restored per tick (every 15 frames / ~0.25s)
 	BEACON_ENERGY    = 0.05, -- energy cost per HP healed
+	BEACON_RADIUS    = 280,  -- heal radius (elmos); was missing, would have crashed on the first tick
 
 	commanders = { aegis_commander = true, vanta_commander = true },
 	pylons     = { aegis_pylon = true,     vanta_pylon = true },
 	generators = { aegis_generator = true, vanta_generator = true },
 	siphons    = { aegis_siphon = true,    vanta_siphon = true },
 	turrets    = { aegis_turret = true,    vanta_turret = true },
+	beacons    = { aegis_beacon = true,    vanta_beacon = true },     -- repair beacons
+	masts      = { aegis_mast = true,      vanta_mast = true },       -- sensor masts (vision + radar)
+	obelisks   = { aegis_obelisk = true,   vanta_mortar = true },     -- heavy long-range towers
 	factories  = { aegis_factory = true,   vanta_factory = true },
 }

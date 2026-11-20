@@ -1,7 +1,7 @@
 function gadget:GetInfo()
 	return {
 		name    = "PW Power Grid",
-		desc    = "Siphons, turrets and factories only work while a finished pylon of their team is in range; otherwise they are shut down",
+		desc    = "Siphons, turrets, beacons, masts, towers and factories only work while a finished pylon of their team is in range; otherwise they are shut down",
 		author  = "Pylon Wars",
 		date    = "2026",
 		license = "GPL v2 or later",
@@ -15,10 +15,6 @@ if not gadgetHandler:IsSyncedCode() then return end
 local cfg       = VFS.Include("LuaRules/Headers/pw_config.lua")
 local placement = VFS.Include("LuaRules/Headers/pw_placement.lua")
 local powered   = {}   -- [unitID] = true/false (last known state)
-
-local function IsConsumer(name)
-	return cfg.siphons[name] or cfg.turrets[name] or cfg.factories[name]
-end
 
 local function HasPower(unitID, teamID, sets)
 	local x, _, z = Spring.GetUnitPosition(unitID)
@@ -34,8 +30,9 @@ function gadget:GameFrame(frame)
 	if frame % 15 ~= 7 then return end
 	local sets = placement.Sets()
 	for _, unitID in ipairs(Spring.GetAllUnits()) do
-		local ud = UnitDefs[Spring.GetUnitDefID(unitID)]
-		if ud and IsConsumer(ud.name) and not Spring.GetUnitIsBeingBuilt(unitID) then
+		local defID = Spring.GetUnitDefID(unitID)
+		local ud = UnitDefs[defID]
+		if ud and sets.consumers[defID] and not Spring.GetUnitIsBeingBuilt(unitID) then
 			local teamID = Spring.GetUnitTeam(unitID)
 			local on = HasPower(unitID, teamID, sets)
 			local _, maxhp = Spring.GetUnitHealth(unitID)

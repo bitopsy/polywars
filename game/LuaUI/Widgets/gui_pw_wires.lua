@@ -43,7 +43,7 @@ local function Rebuild()
 				              done = not Spring.GetUnitIsBeingBuilt(u) }
 				if sets.pylons[d] then pyl[#pyl + 1] = rec
 				elseif sets.generators[d] then rec.kind = "generator"; rec.range = cfg.POWER_LINK_RANGE; others[#others + 1] = rec
-				elseif sets.siphons[d] or sets.turrets[d] or sets.factories[d] then
+				elseif sets.consumers[d] then
 					rec.kind = "consumer"; rec.range = cfg.PYLON_RANGE; others[#others + 1] = rec
 				end
 			end
