@@ -2,8 +2,8 @@
 // (after `python3 build.py --install`)  Two human slots, one per faction.
 [GAME]
 {
-	GameType = Pylon Wars 0.3.2;
-	MapName  = Pylon City 1.0;
+	GameType = polywars 0.6.1;
+	MapName  = polycity 1.0;
 	IsHost   = 1;
 	MyPlayerName = Commander;
 	HostIP   = 127.0.0.1;

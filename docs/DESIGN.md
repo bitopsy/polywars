@@ -1,4 +1,4 @@
-# Pylon Wars - design
+# polywars - design
 
 An RTS where the **commander is a hero unit**: you spend most of a fight micro-managing
 one character (positioning, weapon swaps, energy), like an MMORPG, while a small economy
@@ -38,7 +38,7 @@ The commander starts with 1500 energy storage and +25 E/s; spamming all six empt
 * The HUD shows range, damage, energy cost and cooldown per slot, plus rings on the ground for every enabled weapon.
 
 ## Economy and building
-* Resources: **metal** (commander +3/s, each factory +2/s) and **energy** (commander +25/s, generators).
+* Resources: **metal** (commander +3/s, each factory +2/s) and **energy** (commander +25/s, generators +28/s Aegis, +25/s Vanta).
 * Commander builds: **Pylon**, **Generator**, **Weapon Factory**, **Siphon**.
 * **Factory rule** (enforced in `LuaRules/Gadgets/pw_factory_rules.lua`):
   1. the build position is over a metal spot, **and**
@@ -78,17 +78,32 @@ The commander starts with 1500 energy storage and +25 E/s; spamming all six empt
 * **Heavy units**: Aegis *Warden* (3000 HP, 460-range beam, 400 metal) and Vanta *Juggernaut* (4000 HP, 310-range autocannon, 420 metal) from the weapon factories: a slow, expensive third tier that anchors a push.
 * **Turrets**: Aegis *Sentry* (laser, 420 range) and Vanta *Bastion* (autocannon, 350 range). They only build inside a finished pylon's range (`CanPlaceTurret`), so defending a siphon means extending the network first.
 * **Bot**: builds a turret at its base spot and at every siphon it claims, and blinks its commander back home when it drops below 35 % health with armed enemies nearby.
-* Version is now 0.3.0 (`modinfo.lua`): start scripts must say `Pylon Wars 0.3.2`.
+* Version is now 0.3.0 (`modinfo.lua`): start scripts must say `Pylon Wars 0.6.1`.
 
 ## v0.3.2: the wired network
-Pylons form a mesh (links up to `WIRE_PYLON_LINK` = 340 elmos). Generators within `POWER_LINK_RANGE` of a pylon feed it; siphons, turrets and factories need a finished pylon within `PYLON_RANGE`. Lose that pylon and they shut down until it is rebuilt, so pylons are the weak point to snipe and to defend. Wires are drawn by `gui_pw_wires.lua`.
+Pylons form a mesh (links up to `WIRE_PYLON_LINK` = 340 elmos). Generators within `POWER_LINK_RANGE` of a pylon feed it; siphons, turrets and factories need a finished pylon within `PYLON_RANGE`. Lose that pylon and they shut down until it is rebuilt, so pylons are the weak point to snipe and to defend. Wires are drawn by `LuaRules/Gadgets/pw_wires.lua`.
+
+## Audio
+See README (v0.4.0). Sound names are defined in `gamedata/sounds.lua`; add a new effect by adding a WAV, a `SoundItems` entry, and a `soundstart`/`soundhit`/`GG.PW_Sound` reference.
+
+## v0.6.0 roster
+| Role | Aegis | Vanta |
+|---|---|---|
+| Fast harasser | Scout (300 hp, 250 range) | Raider (380 hp, 220 range, spray) |
+| Core line | Skirmisher / Striker (400 range) | Gunner / Bruiser (280 range, scatter) |
+| Long range | Prism (lance) | Howitzer |
+| Heavy | Warden | Juggernaut |
+| Builder | Constructor | Constructor |
+| Static D | Sentry, Obelisk (720 range) | Bastion, Mortar Battery (780 range, AoE) |
+| Support | Repair Beacon, Sensor Mast, Barrier | Repair Beacon, Sensor Mast, Barrier |
+Pylon-powered set: `cfg.turrets` (turrets, artillery, beacons, masts). Beacon tuning: `BEACON_*` in `pw_config.lua`.
 
 ## Engine notes (learned the hard way)
 * LuaRules needs **both** `LuaRules/main.lua` and `draw.lua`; otherwise no gadget loads.
 * Unit `weapons` entries use `name =`, not `def =`.
 * Lua unit scripts (`scripts/`) only run with the `unit_script.lua` gadget; builders/factories/weapons need script callins (`scripts/pw_common.lua`). Factories must open the yard in `Activate`.
 * Structures need a yardmap (generated in `def()`); factories also need `isfactory = true`.
-* Start scripts use full archive names (`Pylon Wars 0.3.2`, `Pylon City 1.0`).
+* Start scripts use full archive names (`Pylon Wars 0.6.1`, `Pylon City 1.0`).
 * Models are placeholder boxes without animation.
 
 ## Next steps
