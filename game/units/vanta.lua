@@ -53,7 +53,7 @@ return {
 		name = "Vanta Generator", description = "Energy generator",
 		objectname = "vanta_generator.s3o", buildpic = "vanta_generator.png",
 		maxdamage = 1100, buildcostmetal = 100, buildcostenergy = 90, buildtime = 1800,
-		footprintx = 3, footprintz = 3, energymake = 25, energyuse = 20,
+		footprintx = 3, footprintz = 3, energymake = 50,
 	}, STRUCTURE),
 
 	vanta_siphon = def({

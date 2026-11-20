@@ -54,7 +54,7 @@ return {
 		name = "Aegis Generator", description = "Energy generator",
 		objectname = "aegis_generator.s3o", buildpic = "aegis_generator.png",
 		maxdamage = 900, buildcostmetal = 90, buildcostenergy = 100, buildtime = 1800,
-		footprintx = 3, footprintz = 3, energymake = 28, energyuse = 20,
+		footprintx = 3, footprintz = 3, energymake = 56,
 	}, STRUCTURE),
 
 	aegis_siphon = def({

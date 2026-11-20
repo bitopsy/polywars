@@ -15,7 +15,7 @@ and a few factories scale the army behind him.
 | Identity | precise, long reach, energy-hungry | kinetic, short reach, high burst, tougher |
 | Commander HP / speed | 3800 / 2.3 | 4600 / 1.9 |
 | Pylon / generator / factory (metal) | 60 / 90 / 400 | 70 / 100 / 420 |
-| Generator output | 45 E/s | 40 E/s |
+| Generator output | 56 E/s | 50 E/s |
 | Units | Skirmisher (fast laser), Prism Tank (long lance) | Gunner (autocannon), Howitzer (artillery) |
 
 ## Commander weapons (slot = hotkey Z X C V B N)
