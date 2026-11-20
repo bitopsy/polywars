@@ -1,0 +1,64 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed to create tags/releases and upload assets
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # The .sdz only needs Python 3. Maps (.sd7) need a map compiler, so we ship the
+      # prebuilt ones committed in dist/ instead of rebuilding them here.
+      - name: Build game (.sdz)
+        run: python3 build.py --game
+
+      - name: Work out version and tag
+        id: ver
+        run: |
+          VERSION=$(sed -nE 's/.*version[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' game/modinfo.lua | head -n1)
+          [ -n "$VERSION" ] || { echo "Could not read version from game/modinfo.lua"; exit 1; }
+          # If this run was triggered by a tag push, use that tag; otherwise v<version>
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then TAG="${GITHUB_REF_NAME}"; else TAG="v${VERSION}"; fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          test -f "dist/PylonWars-${VERSION}.sdz" || { echo "dist/PylonWars-${VERSION}.sdz was not built"; ls dist; exit 1; }
+
+      - name: Create tag/release if missing, then upload assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.ver.outputs.tag }}
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          shopt -s nullglob
+          assets=("dist/PylonWars-${VERSION}.sdz" dist/*.sd7)
+          echo "Assets: ${assets[*]}"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG exists - updating assets"
+          else
+            echo "Creating release (and tag if needed) $TAG"
+            # --target makes GitHub create the tag at this commit when it doesn't exist yet
+            gh release create "$TAG" --target "$GITHUB_SHA" \
+              --title "Pylon Wars ${VERSION}" --generate-notes
+          fi
+
+          # --clobber replaces assets with the same name on re-runs
+          gh release upload "$TAG" "${assets[@]}" --clobber
