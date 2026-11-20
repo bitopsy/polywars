@@ -123,3 +123,7 @@ The bot builds a beacon and artillery at home and only mass-produces armed units
   drawn on the wire overlay, previewed by the placement widget (new `cfg.beacons/masts/obelisks`, `placement.Sets().consumers`).
 * Removed the deprecated `Spring.GetUnitCommands(id, 0)` calls in the bot (uses `GetUnitCommandCount`).
 * Bot builds a repair beacon at its home base.
+
+**Demo:** [Pylon Wars v0.6.2 gameplay on YouTube](https://www.youtube.com/watch?v=WctTM2Ldu54)
+
+## v0.6.1 - scarcer energy, flickering lights
