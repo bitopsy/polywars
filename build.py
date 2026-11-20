@@ -198,6 +198,26 @@ def main():
             failed = True
     if a.install:
         install(results)
+
+    # Include circuit.sd7 in the dist (map archive for the "circuit" map)
+    DIST.mkdir(exist_ok=True)
+    circuit_dst = DIST / "circuit.sd7"
+    if not circuit_dst.exists():
+        circuit_src = ROOT / "dist" / "circuit.sd7"
+        if circuit_src.exists():
+            shutil.copy2(circuit_src, circuit_dst)
+            log(f"circuit: included circuit.sd7 in dist")
+        else:
+            # try restoring from git (in case --clean removed it)
+            result = subprocess.run(
+                ["git", "show", "HEAD:dist/circuit.sd7"],
+                capture_output=True, cwd=ROOT
+            )
+            if result.returncode == 0:
+                with open(circuit_dst, "wb") as f:
+                    f.write(result.stdout)
+                log(f"circuit: restored circuit.sd7 from git")
+
     return 2 if failed else 0
 
 
