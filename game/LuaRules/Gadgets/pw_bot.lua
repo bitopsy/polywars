@@ -130,7 +130,7 @@ local function Think(teamID, b)
 			local px, pz = sx, sz
 			local ps = Spring.GetUnitsInCylinder(sx, sz, cfg.PYLON_RANGE, teamID)
 			for _, u in ipairs(ps) do
-				if Spring.GetUnitDefID(u) == pylon.id then px, _, pz = Spring.GetUnitPosition(u) break end
+				if Spring.GetUnitDefID(u) == pylon.id then local _py; px, _py, pz = Spring.GetUnitPosition(u) break end
 			end
 			local x, z = FindPos(gen.id, px, pz, 70, 170, sx, sz)
 			if x then Build(cmdr, gen.id, x, z) end

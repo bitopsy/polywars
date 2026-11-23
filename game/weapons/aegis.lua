@@ -51,6 +51,19 @@ return {
 		range = 460, reloadtime = 1.2, damage = { default = 85 }, weaponvelocity = 1500,
 		rgbcolor = "0.5 0.8 1.0", thickness = 3, corethickness = 0.45 },
 
+	-- ===== v0.7 (these three were referenced by unit defs but missing, leaving the units unarmed) =====
+	aegis_unit_scout = W{ name = "Scout Laser", weapontype = "LaserCannon",
+		range = 280, reloadtime = 0.4, damage = { default = 11 }, weaponvelocity = 1000,
+		rgbcolor = "0.4 0.8 1.0", thickness = 1.6, corethickness = 0.3 },
+
+	aegis_unit_striker = W{ name = "Striker Twin Laser", weapontype = "LaserCannon",
+		range = 400, reloadtime = 0.7, damage = { default = 42 }, weaponvelocity = 1300,
+		rgbcolor = "0.3 0.7 1.0", thickness = 2.4, corethickness = 0.4 },
+
+	aegis_turret_obelisk = W{ name = "Obelisk Beam", weapontype = "LaserCannon",
+		range = 780, reloadtime = 3.2, damage = { default = 230 }, weaponvelocity = 2400, areaofeffect = 20,
+		rgbcolor = "0.7 0.9 1.0", thickness = 4.5, corethickness = 0.6, laserflaresize = 8 },
+
 	aegis_turret_laser = W{ name = "Sentry Laser", weapontype = "LaserCannon",
 		range = 420, reloadtime = 0.6, damage = { default = 40 }, weaponvelocity = 1400,
 		rgbcolor = "0.3 0.7 1.0", thickness = 2.5, corethickness = 0.4 },

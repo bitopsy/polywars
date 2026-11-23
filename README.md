@@ -9,16 +9,16 @@ Full design: [docs/DESIGN.md](docs/DESIGN.md).
 ```
 dist/   build output (.sdz game, .sd7 map)        docs/   design + example start script
 game/   the game archive root (becomes the .sdz)   map/    mapinfo.lua + generated map sources
-tools/  gen_map.py, gen_assets.py, pngutil.py      build.py
+tools/  gen_map.py, gen_assets.py (bricklib + brickunits), bake_icons.py, pngutil.py      build.py
 ```
 
 ## Build
 ```
 python3 build.py              # game + map
-python3 build.py --game       # dist/PylonWars-0.6.2.sdz  (no dependencies)
+python3 build.py --game       # dist/PylonWars-0.7.0.sdz  (no dependencies)
 python3 build.py --map        # dist/polycity.sd7
 python3 build.py --install    # copy into ~/.spring (or %USERPROFILE%/Documents/My Games/Spring, or $SPRING_DATADIR)
-python3 build.py --assets     # regenerate placeholder models/textures/pics
+python3 build.py --assets     # regenerate the brick models + textures from tools/brickunits.py
 ```
 The `.sdz` needs only Python 3. The `.sd7` additionally needs:
 1. a **map compiler** on PATH (`springmapconvng`, `pymapconv` or `mapconv`), or set
@@ -34,9 +34,34 @@ Without a compiler, `build.py --map` still writes the PNG sources to `map/build/
 * **Z X C V B N** or click the bar: toggle weapon slots 1-6 (rings on the ground show enabled ranges)
 * build Pylon + Generator near a metal spot, then the Weapon Factory (the overlay shows why a spot is invalid).
 
+## v0.7.0 - Brick Wars: everything is LEGO now
+
+![Pylon Wars v0.7.0: Aegis vs Vanta on a baseplate](docs/banner_0.7.0.jpg)
+
+**Art**
+* Every unit and structure was rebuilt as a real brick model: studded, bevelled, glossy-plastic parts (bricks, plates, slopes, round bricks, tyres, tracks, crystals). Soldiers, builders and both Commanders are proper **minifigures** (hard hats, visors, capes, jetpacks, horns).
+* Models are now multi-piece and **animated**: turrets and arms aim at their targets, legs walk, wheels and track bogies spin, radar dishes / generator fans / drills / pylon rings / medic rotors turn, factory cranes swing while building, nano arms are the beam source.
+* **Units die brick by brick**: every piece (legs, arms, turret, wheels and loose bricks) tumbles off as debris, with a plastic clatter sound.
+* New **build pictures** (rendered from the models, faction colours, tier studs), new **strategic icons** (white brick silhouettes tinted by the team colour, used when zoomed out and on the minimap), new side pics and a new loading screen.
+* Everything is generated: `tools/bricklib.py` (brick kit + S3O writer), `tools/brickunits.py` (the designs), `tools/bake_icons.py` (pictures).
+
+**Gameplay**
+* New unit: **Aegis Mender**, a support walker that repairs friendly units within 170 elmos (mobile mini-beacon, pylon not required).
+* New unit: **Vanta Breacher**, a slow siege walker with a demolition cannon (range 360, 230 damage, 70 radius).
+* Veteran units show 1-4 golden studs above them (new widget `gui_pw_veterans`).
+* Unit script rewrite (`scripts/pw_common.lua`): one convention-based script animates every model; the six commander weapons no longer share one aim signal.
+* `tools/test_scripts.py`: offline test that runs every unit script against its real piece list (`pip install lupa`).
+
+### Regenerating the art
+```
+python3 tools/gen_assets.py     # .s3o models + colour atlases (pure Python)
+python3 tools/bake_icons.py     # build pics / icons / loading screen (Pillow, three.js, Playwright; see its docstring)
+python3 tools/test_scripts.py   # Lua syntax + unit-script test (pip install lupa)
+```
+
 ## Changelog (engine-tested fixes)
 - Added `LuaRules/main.lua` + `draw.lua` (without them no gadget loads, so no commander spawned).
-- Start scripts must use full archive names: `polywars 0.6.2`, `polycity 1.0`.
+- Start scripts must use full archive names: `polywars 0.7.0`, `polycity 1.0`.
 - Unit `weapons` entries use `name =` (this engine ignores `def =`).
 - Lua unit scripts (`scripts/`) + shipped `unit_script.lua` gadget: required for building/aiming.
 - Factories need `isfactory`, a yardmap and a yard-opening `Activate`; all structures get a yardmap.

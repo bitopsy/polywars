@@ -21,7 +21,7 @@ local MOBILE = {
 	sounds = { select = { "pw_select" }, ok = { "pw_ok" }, cant = { "pw_cant" } },
 }
 
-return {
+local units = {
 	aegis_commander = def({
 		script = "aegis_commander.lua",
 		explodeas = "pw_blast_large", selfdestructas = "pw_blast_large",
@@ -71,7 +71,7 @@ return {
 		objectname = "aegis_factory.s3o", buildpic = "aegis_factory.png",
 		maxdamage = 2800, buildcostmetal = 400, buildcostenergy = 700, buildtime = 5000,
 		footprintx = 4, footprintz = 4, yardmap = string.rep("o", 16), isfactory = true, builder = true, workertime = 120, buildspeed = 120, metalmake = 2, energyuse = 40,
-		buildoptions = { "aegis_skirmisher", "aegis_prism", "aegis_heavy", "aegis_scout", "aegis_striker", "aegis_constructor" },
+		buildoptions = { "aegis_skirmisher", "aegis_prism", "aegis_heavy", "aegis_scout", "aegis_striker", "aegis_mender", "aegis_constructor" },
 	}, STRUCTURE),
 
 	aegis_skirmisher = def({
@@ -169,4 +169,18 @@ return {
 		builder = true, workertime = 120, buildspeed = 120, builddistance = 150,
 		buildoptions = { "aegis_pylon", "aegis_generator", "aegis_siphon", "aegis_turret", "aegis_beacon", "aegis_mast", "aegis_barrier", "aegis_obelisk" },
 	}, MOBILE),
+
+	aegis_mender = def({
+		script = "aegis_mender.lua", name = "Mender", description = "Support walker: repairs friendly units around it (no weapon)",
+		objectname = "aegis_mender.s3o", buildpic = "aegis_mender.png",
+		maxdamage = 550, buildcostmetal = 90, buildcostenergy = 150, buildtime = 1800,
+		footprintx = 2, footprintz = 2, movementclass = "KBOT2",
+		maxvelocity = 2.6, acceleration = 0.28, brakerate = 0.6, turnrate = 1300, sightdistance = 420,
+	}, MOBILE),
 }
+
+-- strategic icon + build picture share the unit's name (see tools/bake_icons.py)
+for name, ud in pairs(units) do
+	ud.icontype = name
+end
+return units

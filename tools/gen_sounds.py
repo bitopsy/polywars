@@ -53,4 +53,17 @@ save("blink",    E(sweep(300, 2400, .28) * 0.8 + 0.3 * lowpass(noise(int(SR * .2
 save("levelup",  E(np.concatenate([tone(f, .1) for f in (523, 659, 784, 1047)]), decay=1.6), 0.7)
 save("power_off",E(sweep(700, 90, .5), decay=3), 0.6)
 save("power_on", E(sweep(120, 900, .4), a=0.02, decay=2.5), 0.6)
+# ---- v0.7 brick sounds: plastic clatter when a unit falls apart, a "snap" for finished bricks
+def clicks(n, span, lo, hi, decay=60):
+    out = np.zeros(int(SR * span))
+    for _ in range(n):
+        at = int(rng.uniform(0, span * 0.8) * SR)
+        f = rng.uniform(lo, hi)
+        d = tone(f, 0.06) * np.exp(-decay * np.linspace(0, 0.06, int(SR * 0.06)))
+        d = d + 0.5 * tone(f * 1.52, 0.06) * np.exp(-decay * 1.4 * np.linspace(0, 0.06, int(SR * 0.06)))
+        seg = out[at:at + len(d)]
+        out[at:at + len(d)] += d[:len(seg)] * rng.uniform(0.5, 1.0)
+    return out
+save("clatter", clicks(14, 0.9, 1400, 3800), 0.7)
+save("snap",    clicks(2, 0.12, 1800, 2600, 90), 0.6)
 print("wrote", len(os.listdir(OUT)), "sounds to", os.path.abspath(OUT))

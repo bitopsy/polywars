@@ -1,0 +1,9 @@
+{
+  "name": "polywars_circuit_7gen",
+  "game": "polywars",
+  "game_version": "0.6.2",
+  "map": "circuit.sd7",
+  "generations": 7,
+  "starting_bot": "default",
+  "created": "2026-11-21"
+}

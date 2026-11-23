@@ -47,6 +47,23 @@ return {
 	vanta_unit_juggernaut = W{ name = "Juggernaut Cannon",
 		range = 310, reloadtime = 0.4, damage = { default = 48 }, weaponvelocity = 1300, sprayangle = 300, size = 2.2 },
 
+	-- ===== v0.7 =====
+	-- (raider, bruiser and mortar weapons were referenced by unit defs but missing, leaving the units unarmed)
+	vanta_unit_raider = W{ name = "Raider SMG",
+		range = 240, reloadtime = 0.15, damage = { default = 8 }, weaponvelocity = 1500, sprayangle = 700, size = 1.2 },
+
+	vanta_unit_bruiser = W{ name = "Bruiser Scattergun",
+		range = 250, reloadtime = 1.2, damage = { default = 20 }, projectiles = 5, sprayangle = 1400,
+		weaponvelocity = 1100, size = 1.8 },
+
+	vanta_turret_mortar = W{ name = "Battery Mortar",
+		range = 900, reloadtime = 3.5, damage = { default = 140 }, areaofeffect = 100,
+		edgeeffectiveness = 0.4, weaponvelocity = 440, size = 5 },
+
+	vanta_unit_breacher = W{ name = "Demolition Cannon",
+		range = 360, reloadtime = 2.6, damage = { default = 230 }, areaofeffect = 70,
+		edgeeffectiveness = 0.3, weaponvelocity = 520, size = 5.5 },
+
 	vanta_turret_gun = W{ name = "Bastion Autocannon",
 		range = 350, reloadtime = 0.3, damage = { default = 22 }, weaponvelocity = 1500, sprayangle = 350, size = 1.8 },
 }

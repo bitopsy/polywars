@@ -15,21 +15,25 @@ if not gadgetHandler:IsSyncedCode() then return end
 local cfg = VFS.Include("LuaRules/Headers/pw_config.lua")
 local STEP = 15   -- frames between heal ticks
 
-local beaconDefs = {}   -- [unitDefID] = true
+local beaconDefs = {}   -- [unitDefID] = {heal = HP/tick, radius = elmos}
 
 function gadget:Initialize()
 	for name in pairs(cfg.beacons or {}) do
 		local ud = UnitDefNames[name]
-		if ud then beaconDefs[ud.id] = true end
+		if ud then beaconDefs[ud.id] = { heal = cfg.BEACON_HEAL, radius = cfg.BEACON_RADIUS or 280 } end
+	end
+	for name in pairs(cfg.menders or {}) do
+		local ud = UnitDefNames[name]
+		if ud then beaconDefs[ud.id] = { heal = cfg.MENDER_HEAL or 22, radius = cfg.MENDER_RADIUS or 170 } end
 	end
 end
 
 function gadget:GameFrame(frame)
 	if frame % STEP ~= 3 then return end
-	local perTick = cfg.BEACON_HEAL * STEP / 30
-	local radius  = cfg.BEACON_RADIUS or 280
 	for _, teamID in ipairs(Spring.GetTeamList()) do
-		for defID in pairs(beaconDefs) do
+		for defID, p in pairs(beaconDefs) do
+			local perTick = p.heal * STEP / 30
+			local radius  = p.radius
 			for _, b in ipairs(Spring.GetTeamUnitsByDefs(teamID, { defID })) do
 				-- stunned == unpowered (pw_power_grid paralyses structures without a pylon)
 				if not Spring.GetUnitIsBeingBuilt(b) and not Spring.GetUnitIsStunned(b) then

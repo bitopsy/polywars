@@ -17,6 +17,8 @@ return {
 		pw_blink = { file = "sounds/blink.wav", gain = 0.8, pitchmod = 0.03, maxconcurrent = 2, rolloff = 1 },
 		pw_levelup = { file = "sounds/levelup.wav", gain = 0.7, pitchmod = 0.0, maxconcurrent = 1, rolloff = 1 },
 		pw_power_off = { file = "sounds/power_off.wav", gain = 0.7, pitchmod = 0.0, maxconcurrent = 2, rolloff = 1 },
+		pw_clatter = { file = "sounds/clatter.wav", gain = 0.5, pitchmod = 0.12, maxconcurrent = 3, rolloff = 1 },
+		pw_snap = { file = "sounds/snap.wav", gain = 0.5, pitchmod = 0.1, maxconcurrent = 3, rolloff = 1 },
 		pw_power_on = { file = "sounds/power_on.wav", gain = 0.6, pitchmod = 0.0, maxconcurrent = 2, rolloff = 1 },
 	},
 }

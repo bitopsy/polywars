@@ -13,6 +13,7 @@ end
 local FILES = {
 	complete = "sounds/complete.wav", blink = "sounds/blink.wav", levelup = "sounds/levelup.wav",
 	power_off = "sounds/power_off.wav", power_on = "sounds/power_on.wav",
+	clatter = "sounds/clatter.wav", snap = "sounds/snap.wav",
 }
 
 if gadgetHandler:IsSyncedCode() then
@@ -21,6 +22,15 @@ if gadgetHandler:IsSyncedCode() then
 	-- name, position, and optionally the team that should hear it (nil = everyone who can see the spot)
 	GG.PW_Sound = function(name, x, y, z, team)
 		SendToUnsynced("pw_sound", name, x, y, z, team or -1)
+	end
+
+	-- v0.7: every unit that dies falls apart into bricks (the unit scripts explode their pieces)
+	function gadget:UnitDestroyed(unitID, unitDefID, teamID)
+		local ud = UnitDefs[unitDefID]
+		if ud and not Spring.GetUnitIsBeingBuilt(unitID) then
+			local x, y, z = Spring.GetUnitPosition(unitID)
+			if x then GG.PW_Sound("clatter", x, y, z) end
+		end
 	end
 
 	function gadget:UnitFinished(unitID, unitDefID, teamID)

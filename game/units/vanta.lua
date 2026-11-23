@@ -21,7 +21,7 @@ local MOBILE = {
 	sounds = { select = { "pw_select" }, ok = { "pw_ok" }, cant = { "pw_cant" } },
 }
 
-return {
+local units = {
 	vanta_commander = def({
 		script = "vanta_commander.lua",
 		explodeas = "pw_blast_large", selfdestructas = "pw_blast_large",
@@ -70,7 +70,7 @@ return {
 		objectname = "vanta_factory.s3o", buildpic = "vanta_factory.png",
 		maxdamage = 3400, buildcostmetal = 420, buildcostenergy = 650, buildtime = 5000,
 		footprintx = 4, footprintz = 4, yardmap = string.rep("o", 16), isfactory = true, builder = true, workertime = 120, buildspeed = 120, metalmake = 2, energyuse = 40,
-		buildoptions = { "vanta_gunner", "vanta_howitzer", "vanta_heavy", "vanta_raider", "vanta_bruiser", "vanta_constructor" },
+		buildoptions = { "vanta_gunner", "vanta_howitzer", "vanta_heavy", "vanta_raider", "vanta_bruiser", "vanta_breacher", "vanta_constructor" },
 	}, STRUCTURE),
 
 	vanta_gunner = def({
@@ -168,4 +168,19 @@ return {
 		builder = true, workertime = 120, buildspeed = 120, builddistance = 150,
 		buildoptions = { "vanta_pylon", "vanta_generator", "vanta_siphon", "vanta_turret", "vanta_beacon", "vanta_mast", "vanta_barrier", "vanta_mortar" },
 	}, MOBILE),
+
+	vanta_breacher = def({
+		script = "vanta_breacher.lua", name = "Breacher", description = "Siege walker: slow, tough, with a big-splash demolition cannon",
+		objectname = "vanta_breacher.s3o", buildpic = "vanta_breacher.png",
+		maxdamage = 1500, buildcostmetal = 170, buildcostenergy = 210, buildtime = 3400,
+		footprintx = 2, footprintz = 2, movementclass = "KBOT2",
+		maxvelocity = 1.7, acceleration = 0.18, brakerate = 0.5, turnrate = 800, sightdistance = 430,
+		weapons = { { name = "vanta_unit_breacher" } },
+	}, MOBILE),
 }
+
+-- strategic icon + build picture share the unit's name (see tools/bake_icons.py)
+for name, ud in pairs(units) do
+	ud.icontype = name
+end
+return units

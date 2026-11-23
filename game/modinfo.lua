@@ -4,7 +4,7 @@ return {
 	shortName   = "PW",
 	game        = "polywars",
 	shortGame   = "PW",
-	version     = "0.6.2",
+	version     = "0.7.0",
 	description = "Commander-centric RTS/MMO hybrid: micro your commander, wire pylons to power, claim metal spots.",
 	modtype     = 1,
 	author      = "goddot",

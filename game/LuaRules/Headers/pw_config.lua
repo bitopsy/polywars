@@ -43,11 +43,16 @@ return {
 	BEACON_ENERGY    = 0.05, -- energy cost per HP healed
 	BEACON_RADIUS    = 280,  -- heal radius (elmos); was missing, would have crashed on the first tick
 
+	-- Menders (v0.7): mobile repair walkers, a smaller/slower version of the beacon
+	MENDER_HEAL      = 22,   -- HP per tick (every 15 frames)
+	MENDER_RADIUS    = 170,
+
 	commanders = { aegis_commander = true, vanta_commander = true },
 	pylons     = { aegis_pylon = true,     vanta_pylon = true },
 	generators = { aegis_generator = true, vanta_generator = true },
 	siphons    = { aegis_siphon = true,    vanta_siphon = true },
 	turrets    = { aegis_turret = true,    vanta_turret = true },
+	menders    = { aegis_mender = true },                              -- mobile repair walkers
 	beacons    = { aegis_beacon = true,    vanta_beacon = true },     -- repair beacons
 	masts      = { aegis_mast = true,      vanta_mast = true },       -- sensor masts (vision + radar)
 	obelisks   = { aegis_obelisk = true,   vanta_mortar = true },     -- heavy long-range towers

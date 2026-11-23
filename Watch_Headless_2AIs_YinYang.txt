@@ -1,0 +1,69 @@
+[GAME]
+{
+	GameType=polywars 0.7.0;
+	MapName=Yin-Yang 1.0;
+	IsHeadless=1;
+	Modified=1;
+	IsHost=1;
+	HostIP=127.0.0.1;
+	HostPort=8452;
+	MyPlayerName=Spectator;
+	StartPosType=0;
+	NumPlayers=2;
+	NumUsers=2;
+	NumTeams=2;
+	NumAllyTeams=2;
+	gameSpeed=5;
+	[MODOPTIONS]
+	{
+		commander_ends=1;
+		startmetal=1000;
+		startenergy=1000;
+	}
+	[PLAYER0]
+	{
+		Name=AI1;
+		Spectator=0;
+		Team=0;
+	}
+	[PLAYER1]
+	{
+		Name=AI2;
+		Spectator=0;
+		Team=1;
+	}
+	[TEAM0]
+	{
+		TeamLeader=0;
+		AllyTeam=0;
+		RGBColor=0.35 0.7 1.0;
+		Side=Aegis;
+		StartPosX=0;
+		StartPosZ=0;
+	}
+	[TEAM1]
+	{
+		TeamLeader=0;
+		AllyTeam=0;
+		RGBColor=1.0 0.5 0.1;
+		Side=Aegis;
+		StartPosX=2048;
+		StartPosZ=2048;
+	}
+	[AI0]
+	{
+		Name=pw_bot;
+		ShortName=pwbot;
+		Team=0;
+		Host=0;
+	}
+	[AI1]
+	{
+		Name=llmAI;
+		ShortName=llm;
+		Team=1;
+		Host=0;
+	}
+	[ALLYTEAM0] { NumAllies=0; }
+	[ALLYTEAM1] { NumAllies=0; }
+}

@@ -1,0 +1,67 @@
+[GAME]
+{
+	GameType=polywars 0.7.0;
+	MapName=Circuit 1.0;
+	IsHost=1;
+	HostIP=127.0.0.1;
+	HostPort=8452;
+	MyPlayerName=Spectator1;
+	StartPosType=0;
+	NumPlayers=2;
+	NumUsers=2;
+	NumTeams=2;
+	NumAllyTeams=2;
+		gameSpeed=5;
+	[MODOPTIONS]
+	{
+		commander_ends=1;
+		startmetal=1000;
+		startenergy=1000;
+	}
+	[PLAYER0]
+	{
+		Name=DefaultAI;
+		Spectator=0;
+		Team=0;
+	}
+	[PLAYER1]
+	{
+		Name=llmAI;
+		Spectator=0;
+		Team=1;
+	}
+	[TEAM0]
+	{
+		TeamLeader=0;
+		AllyTeam=0;
+		RGBColor=0.35 0.7 1.0;
+		Side=Vanta;
+		StartPosX=0;
+		StartPosZ=0;
+	}
+	[TEAM1]
+	{
+		TeamLeader=0;
+		AllyTeam=1;
+		RGBColor=1.0 0.5 1.0;
+		Side=Vanta;
+		StartPosX=2048;
+		StartPosZ=2048;
+	}
+	[AI0]
+	{
+		Name=pw_bot;
+		ShortName=Default;
+		Team=0;
+		Host=0;
+	}
+	[AI1]
+	{
+		Name=llmAI;
+		ShortName=Evolved;
+		Team=1;
+		Host=0;
+	}
+	[ALLYTEAM0] { NumAllies=0; }
+	[ALLYTEAM1] { NumAllies=0; }
+}

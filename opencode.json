@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "evolab": {
+      "type": "local",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "evolab",
+        "serve"
+      ],
+      "enabled": true,
+      "environment": {
+        "EVOLAB_HOME": "/home/al/evolab_runs"
+      },
+      "timeout": 120000
+    }
+  },
+  "command": {
+    "evolve": {
+      "description": "Run the evolab coaching loop on an experiment",
+      "template": "Use the evolab MCP tools. Arguments: $ARGUMENTS (experiment name, optionally number of generations; default 3). If the experiment does not exist, ask me for game, maps and an optional Lua AI to start from, then create it. Otherwise follow the evolab loop from AGENTS.md for the requested generations, then regenerate the dashboard and summarise: Elo progress vs the anchor, which operators and hypotheses paid off, diversity, and what you will try next."
+    }
+  }
+}
